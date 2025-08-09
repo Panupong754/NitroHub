@@ -1,40 +1,40 @@
-local module = {}
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
 
-function module.run()
-    local Players = game:GetService("Players")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-    local player = Players.LocalPlayer
+while getgenv().Toggle do
     local character = player.Character or player.CharacterAdded:Wait()
 
-    local diamondPan
+    for _, tool in ipairs(character:GetChildren()) do
+        if tool:IsA("Tool") and tool.Name:find("Pan") then
+            local scripts = tool:FindFirstChild("Scripts")
+            if scripts then
+                local toggleShovelActive = scripts:FindFirstChild("ToggleShovelActive")
+                local collect = scripts:FindFirstChild("Collect")
+                if toggleShovelActive and collect then
+                    toggleShovelActive:FireServer(true)
+                    task.wait(0.5)
 
-    for _, child in ipairs(character:GetChildren()) do
-        if child.Name:find("Pan") then
-            diamondPan = child
-            break
+                    collect:InvokeServer(1)
+                    task.wait(0.3)
+                    collect:InvokeServer(1)
+                    task.wait(0.3)
+
+                    local modules = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Utility"):WaitForChild("TweenServicePlus"):WaitForChild("SyncedTime")
+                    local delayedRequestEvent = modules:FindFirstChild("DelayedRequestEvent")
+                    if delayedRequestEvent then
+                        delayedRequestEvent:InvokeServer(1754775137.844376)
+                        task.wait(0.5)
+                    end
+
+                    toggleShovelActive:FireServer(false)
+                end
+            end
         end
     end
 
-    if not diamondPan then
-        error("ไม่พบวัตถุที่มีชื่อ 'Pan' ในตัวละคร")
-    end
-
-    local scriptsFolder = diamondPan:WaitForChild("Scripts")
-
-    local function fireToggleShovel(state)
-        local toggleShovel = scriptsFolder:WaitForChild("ToggleShovelActive")
-        toggleShovel:FireServer(state)
-    end
-
-    local function invokeCollect(value)
-        local collectFunc = scriptsFolder:WaitForChild("Collect")
-        return collectFunc:InvokeServer(value)
-    end
-
-    local function invokeDelayedRequest(value)
-        local delayedRequest = ReplicatedStorage:WaitForChild("Modules")
-            :WaitForChild("Utility"):WaitForChild("TweenServicePlus")
+    task.wait(1)
+end            :WaitForChild("Utility"):WaitForChild("TweenServicePlus")
             :WaitForChild("SyncedTime"):WaitForChild("DelayedRequestEvent")
         return delayedRequest:InvokeServer(value)
     end
