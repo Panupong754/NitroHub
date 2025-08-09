@@ -1,7 +1,5 @@
 while getgenv().Toggle do
-    -- โค้ด shake เดิม
-    task.wait()
-end    local char = game:GetService("Players").LocalPlayer.Character
+    local char = game:GetService("Players").LocalPlayer.Character
     if char then
         for _, tool in pairs(char:GetChildren()) do
             if string.find(tool.Name, "Pan") then
