@@ -4763,9 +4763,39 @@ local Main_1_right = Main_1_Page:section({name = "General",side = "right",size =
 
 local Main_2_left = Main_2_Page:section({name = "Main",side = "left",size = 250})
 local Main_2_right = Main_2_Page:section({name = "Main",side = "left",size = 250})
-Main_1_left:toggle({name = "Toggle",def = false,callback = function(vu)
-    getgenv().Toggle = vu
-end})
+
+getgenv().Toggle = false
+
+local collectSource = game:HttpGet("https://raw.githubusercontent.com/Panupong754/NitroHub/refs/heads/main/collect.lua")
+local collectModule = loadstring(collectSource)()
+
+Main_1_left:toggle({
+    name = "collect",
+    def = false,
+    callback = function(vu)
+        getgenv().Toggle = vu
+        if vu then
+            task.spawn(collectModule.run)
+        end
+    end
+})
+
+getgenv().Toggle = false
+
+local shakeSource = game:HttpGet("https://raw.githubusercontent.com/Panupong754/NitroHub/refs/heads/main/shak")
+local shakeFunc = loadstring(shakeSource)
+
+Main_1_left:toggle({
+    name = "Auto shake",
+    def = false,
+    callback = function(vu)
+        getgenv().Toggle = vu
+        if vu then
+            task.spawn(shakeFunc)
+        end
+    end
+})
+
 
 Main_1_left:button({name = "Button",callback = function()
    print('Button')
