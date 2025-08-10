@@ -1,40 +1,31 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
-
-local module = {}
-
-function module.startToggle()
-    if getgenv().Toggle == nil then
-        getgenv().Toggle = false
-    end
-
-    while getgenv().Toggle do
-        local character = player.Character or player.CharacterAdded:Wait()
-
-        for _, tool in ipairs(character:GetChildren()) do
-            if tool:IsA("Tool") and tool.Name:find("Pan") then
-                local scripts = tool:FindFirstChild("Scripts")
-                if scripts then
-                    local toggleShovelActive = scripts:FindFirstChild("ToggleShovelActive")
-                    if toggleShovelActive then toggleShovelActive:FireServer(true) end
+while getgenv().Toggle do
+    local char = game:GetService("Players").LocalPlayer.Character
+    if char then
+        for _, tool in pairs(char:GetChildren()) do
+            if string.find(tool.Name, "Pan") then
+                local scriptsFolder = tool:FindFirstChild("Scripts")
+                if scriptsFolder then
+                    local toggleShovelActive = scriptsFolder:FindFirstChild("ToggleShovelActive")
+                    if toggleShovelActive then
+                        toggleShovelActive:FireServer(true)
+                    end
                     task.wait(0.5)
-
-                    local collect = scripts:FindFirstChild("Collect")
-                    if collect then 
+                    local collect = scriptsFolder:FindFirstChild("Collect")
+                    if collect then
                         collect:InvokeServer(1)
                         task.wait(0.3)
                         collect:InvokeServer(1)
                         task.wait(0.3)
                     end
-
-                    local modules = ReplicatedStorage:WaitForChild("Modules")
-                        :WaitForChild("Utility")
-                        :WaitForChild("TweenServicePlus")
-                        :WaitForChild("SyncedTime")
-                    local delayedRequestEvent = modules:FindFirstChild("DelayedRequestEvent")
-                    if delayedRequestEvent then
-                        delayedRequestEvent:InvokeServer(1754775137.844376)
+                    if toggleShovelActive then
+                        toggleShovelActive:FireServer(false)
+                    end
+                end
+            end
+        end
+    end
+    task.wait(1)
+end                        delayedRequestEvent:InvokeServer(1754775137.844376)
                         task.wait(0.5)
                     end
 
